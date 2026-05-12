@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lounge NEON | 宝塚南口の大人のラウンジ</title>
+  <meta name="description" content="宝塚南口駅徒歩5分。ネオンの光に包まれた大人の隠れ家 Lounge NEON。フリータイム¥4,000。日曜定休 20:00〜LAST。">
+  <meta property="og:title" content="Lounge NEON | 宝塚南口の大人のラウンジ">
+  <meta property="og:description" content="宝塚で、大人の夜を。フリータイム¥4,000。宝塚南口駅徒歩5分。">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+JP:wght@300;400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #060408;
+      --bg2:     #0d090f;
+      --pink:    #e8568a;
+      --pink-l:  #f490b8;
+      --gold:    #c9a44c;
+      --gold-l:  #edd17a;
+      --purple:  #9b59b6;
+      --purple-l:#c39bd3;
+      --white:   #f5f0fa;
+      --gray:    #8a7f90;
+      --glass:   rgba(255,255,255,0.04);
+      --glass-b: rgba(255,255,255,0.08);
+      --glow-p:  rgba(232,86,138,0.35);
+      --glow-g:  rgba(201,164,76,0.3);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Noto Serif JP', serif;
+      overflow-x: hidden;
+      line-height: 1.8;
+    }
+
+    /* ── CANVAS PARTICLES ── */
+    #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 48px;
+      background: rgba(6,4,8,0.75);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(232,86,138,0.12);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-style: italic;
+      letter-spacing: 0.15em;
+      background: linear-gradient(135deg, var(--pink), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px; font-weight: 400; letter-spacing: 0.25em;
+      color: var(--gray); text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--pink-l); }
+    .nav-cta {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.2em;
+      color: var(--bg); background: linear-gradient(135deg, var(--pink), var(--gold));
+      padding: 10px 22px; border-radius: 2px; text-decoration: none;
+      transition: opacity 0.3s, box-shadow 0.3s;
+    }
+    .nav-cta:hover { opacity: 0.85; box-shadow: 0 0 20px var(--glow-p); }
+
+    /* ── SECTION BASE ── */
+    section { position: relative; z-index: 1; padding: 120px 48px; }
+    .container { max-width: 1060px; margin: 0 auto; }
+    .section-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.55em;
+      color: var(--pink); margin-bottom: 16px; display: block;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 5vw, 64px); font-weight: 400;
+      line-height: 1.2; margin-bottom: 24px;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+    .divider {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, var(--pink), var(--gold));
+      margin: 28px 0;
+    }
+
+    /* ── FADE IN ── */
+    .fade-up {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh; padding: 0;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('assets/hero.jpg') center/cover no-repeat;
+      filter: brightness(0.28);
+    }
+    .hero-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 60%, rgba(155,89,182,0.25) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(232,86,138,0.2) 0%, transparent 50%);
+    }
+    .hero-inner {
+      position: relative; z-index: 2;
+      text-align: center; padding: 0 24px;
+    }
+    .hero-sub-en {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px; font-weight: 400; letter-spacing: 0.6em;
+      color: var(--pink-l); margin-bottom: 32px; display: block;
+      animation: fadeSlideDown 1.2s ease both;
+    }
+    .hero-copy {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(52px, 8vw, 100px); font-weight: 400;
+      line-height: 1.1; letter-spacing: 0.04em;
+      animation: fadeSlideUp 1.2s 0.2s ease both;
+    }
+    .hero-copy .line2 {
+      display: block; font-style: italic;
+      background: linear-gradient(135deg, var(--pink-l), var(--gold-l));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-copy .neon-flicker {
+      animation: fadeSlideUp 1.2s 0.2s ease both, neonFlicker 4s 2s infinite;
+    }
+    .hero-tagline {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(14px, 1.5vw, 18px); font-weight: 300;
+      color: rgba(245,240,250,0.7); letter-spacing: 0.15em;
+      margin-top: 28px; margin-bottom: 48px;
+      animation: fadeSlideUp 1.2s 0.4s ease both;
+    }
+    .hero-btns {
+      display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+      animation: fadeSlideUp 1.2s 0.6s ease both;
+    }
+    .btn-primary {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.2em;
+      color: var(--bg);
+      background: linear-gradient(135deg, var(--pink), var(--gold));
+      padding: 16px 40px; border-radius: 2px; text-decoration: none;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .btn-primary:hover { box-shadow: 0 0 40px var(--glow-p); transform: translateY(-2px); }
+    .btn-secondary {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px; font-weight: 400; letter-spacing: 0.2em;
+      color: var(--pink-l);
+      border: 1px solid rgba(232,86,138,0.5);
+      padding: 16px 40px; border-radius: 2px; text-decoration: none;
+      transition: background 0.3s, box-shadow 0.3s;
+      backdrop-filter: blur(8px);
+      background: rgba(232,86,138,0.05);
+    }
+    .btn-secondary:hover { background: rgba(232,86,138,0.12); box-shadow: 0 0 30px var(--glow-p); }
+    .hero-scroll {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      font-family: 'Montserrat', sans-serif; font-size: 9px; letter-spacing: 0.4em;
+      color: var(--gray); animation: fadeSlideUp 1.2s 1s ease both;
+    }
+    .hero-scroll::after {
+      content: ''; width: 1px; height: 40px;
+      background: linear-gradient(var(--pink), transparent);
+      animation: scrollLine 1.8s ease-in-out infinite;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--bg2); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      align-items: center;
+    }
+    .about-text p {
+      font-size: 15px; color: rgba(245,240,250,0.75); line-height: 2.2;
+      margin-bottom: 16px;
+    }
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img-wrap img {
+      width: 100%; border-radius: 2px;
+      filter: brightness(0.85);
+    }
+    .about-img-wrap::before {
+      content: ''; position: absolute;
+      top: -12px; left: -12px; right: 12px; bottom: 12px;
+      border: 1px solid rgba(232,86,138,0.3);
+      border-radius: 2px; pointer-events: none;
+    }
+    .about-img-wrap::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(155,89,182,0.15), transparent 60%);
+      border-radius: 2px; pointer-events: none;
+    }
+    .stat-row {
+      display: flex; gap: 40px; margin-top: 40px;
+    }
+    .stat-item {}
+    .stat-num {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 40px;
+      background: linear-gradient(135deg, var(--pink), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      display: block; line-height: 1;
+    }
+    .stat-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px; letter-spacing: 0.3em; color: var(--gray);
+      margin-top: 6px; display: block;
+    }
+
+    /* ── SYSTEM ── */
+    #system { background: var(--bg); }
+    .system-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      margin-top: 56px;
+    }
+    .system-card {
+      background: var(--glass);
+      border: 1px solid rgba(232,86,138,0.15);
+      border-radius: 4px; padding: 40px 32px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s;
+    }
+    .system-card:hover {
+      border-color: rgba(232,86,138,0.45);
+      box-shadow: 0 0 40px rgba(232,86,138,0.12), inset 0 0 20px rgba(232,86,138,0.04);
+      transform: translateY(-6px);
+    }
+    .system-card-icon {
+      font-size: 32px; margin-bottom: 20px; display: block;
+    }
+    .system-card-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px; letter-spacing: 0.4em; color: var(--pink);
+      margin-bottom: 12px; display: block;
+    }
+    .system-card-price {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: clamp(28px, 3.5vw, 42px);
+      background: linear-gradient(135deg, var(--gold), var(--gold-l));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      display: block; margin-bottom: 16px;
+    }
+    .system-card-desc {
+      font-size: 13px; color: var(--gray); line-height: 1.9;
+    }
+    .system-note {
+      text-align: center; margin-top: 32px;
+      font-size: 12px; color: var(--gray); letter-spacing: 0.05em;
+    }
+
+    /* ── ATMOSPHERE ── */
+    #atmosphere { background: var(--bg2); }
+    .atm-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 56px;
+    }
+    .atm-main { grid-row: 1 / 3; }
+    .atm-img {
+      width: 100%; height: 100%; object-fit: cover;
+      border-radius: 2px; display: block;
+      transition: transform 0.6s ease, filter 0.6s;
+      filter: brightness(0.75) saturate(1.2);
+    }
+    .atm-img-wrap {
+      overflow: hidden; border-radius: 2px;
+      position: relative;
+    }
+    .atm-img-wrap:hover .atm-img { transform: scale(1.04); filter: brightness(0.9) saturate(1.3); }
+    .atm-img-wrap::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(232,86,138,0.08), rgba(155,89,182,0.08));
+      pointer-events: none;
+    }
+    .atm-main .atm-img-wrap { height: 500px; }
+    .atm-sub .atm-img-wrap { height: 240px; }
+
+    /* ── ACCESS ── */
+    #access { background: var(--bg); }
+    .access-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      align-items: start;
+    }
+    .access-info { }
+    .access-item {
+      display: flex; gap: 20px; margin-bottom: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .access-item:last-child { border-bottom: none; }
+    .access-icon {
+      font-size: 18px; flex-shrink: 0; width: 28px;
+      color: var(--pink); margin-top: 2px;
+    }
+    .access-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px; letter-spacing: 0.4em; color: var(--pink);
+      margin-bottom: 6px; display: block;
+    }
+    .access-val {
+      font-size: 15px; color: rgba(245,240,250,0.85); line-height: 1.8;
+    }
+    .map-wrap {
+      border-radius: 4px; overflow: hidden;
+      border: 1px solid rgba(232,86,138,0.2);
+    }
+    .map-wrap iframe { width: 100%; height: 400px; display: block; filter: invert(0.85) hue-rotate(190deg) saturate(0.6); }
+
+    /* ── CTA ── */
+    #cta {
+      background: var(--bg2);
+      text-align: center;
+    }
+    .cta-inner { max-width: 680px; margin: 0 auto; }
+    .cta-inner p {
+      font-size: 16px; color: rgba(245,240,250,0.7);
+      letter-spacing: 0.1em; margin-bottom: 48px; line-height: 2;
+    }
+    .cta-btns { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .cta-tel {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 28px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-l));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      display: block; margin: 32px 0 8px;
+      text-decoration: none;
+    }
+    .cta-tel-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px; letter-spacing: 0.45em; color: var(--gray);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 40px 48px; text-align: center;
+      position: relative; z-index: 1;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: 18px; letter-spacing: 0.2em;
+      background: linear-gradient(135deg, var(--pink), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 16px; display: block;
+    }
+    .footer-info {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px; color: var(--gray); letter-spacing: 0.15em;
+      line-height: 2;
+    }
+    .footer-copy {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px; color: rgba(138,127,144,0.5);
+      margin-top: 24px; letter-spacing: 0.2em;
+    }
+
+    /* ── NEON GLOW DECORATIONS ── */
+    .glow-orb {
+      position: absolute; border-radius: 50%;
+      pointer-events: none; filter: blur(80px); opacity: 0.35;
+    }
+    .glow-pink { background: var(--pink); }
+    .glow-purple { background: var(--purple); }
+    .glow-gold { background: var(--gold); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollLine {
+      0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+      50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+    }
+    @keyframes neonFlicker {
+      0%,100% { opacity: 1; }
+      92% { opacity: 1; }
+      93% { opacity: 0.6; }
+      94% { opacity: 1; }
+      96% { opacity: 0.8; }
+      97% { opacity: 1; }
+    }
+    @keyframes particleDrift {
+      0%   { transform: translateY(0) translateX(0) rotate(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.7; }
+      100% { transform: translateY(-100vh) translateX(var(--drift)) rotate(360deg); opacity: 0; }
+    }
+    @keyframes pulseGlow {
+      0%,100% { box-shadow: 0 0 20px var(--glow-p); }
+      50%      { box-shadow: 0 0 50px var(--glow-p), 0 0 80px rgba(232,86,138,0.15); }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      section { padding: 80px 20px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .system-grid { grid-template-columns: 1fr; gap: 16px; }
+      .atm-grid { grid-template-columns: 1fr; }
+      .atm-main { grid-row: auto; }
+      .atm-main .atm-img-wrap { height: 280px; }
+      .access-inner { grid-template-columns: 1fr; gap: 40px; }
+      .map-wrap iframe { height: 280px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PARTICLES -->
+<canvas id="particles"></canvas>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">NEON</span>
+  <ul class="nav-links">
+    <li><a href="#about">ABOUT</a></li>
+    <li><a href="#system">SYSTEM</a></li>
+    <li><a href="#atmosphere">SPACE</a></li>
+    <li><a href="#access">ACCESS</a></li>
+  </ul>
+  <a href="https://www.instagram.com/neon_lounge3/" target="_blank" class="nav-cta">CONTACT</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <!-- pink orb -->
+  <div class="glow-orb glow-pink" style="width:400px;height:400px;top:10%;left:-10%;"></div>
+  <!-- purple orb -->
+  <div class="glow-orb glow-purple" style="width:500px;height:500px;bottom:-10%;right:-5%;"></div>
+
+  <div class="hero-inner">
+    <span class="hero-sub-en">LOUNGE NEON — TAKARAZUKA</span>
+    <h1 class="hero-copy">
+      宝塚で、<span class="line2 neon-flicker">大人の夜を。</span>
+    </h1>
+    <p class="hero-tagline">ネオンの光に包まれた、とっておきの隠れ家。</p>
+    <div class="hero-btns">
+      <a href="https://www.instagram.com/neon_lounge3/" target="_blank" class="btn-primary">Instagram で予約・相談</a>
+      <a href="#system" class="btn-secondary">料金を見る</a>
+    </div>
+  </div>
+  <div class="hero-scroll">SCROLL</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text fade-up">
+        <span class="section-label">ABOUT</span>
+        <h2 class="section-title">非日常の空間で、<em>特別な夜</em>を。</h2>
+        <div class="divider"></div>
+        <p>宝塚南口駅から徒歩5分。<br>ネオンの光が揺れる大人の隠れ家 Lounge NEON。</p>
+        <p>仕事帰りの一杯も、大切な方との夜も。<br>フレンドリーなキャストとの会話が、<br>あなたの特別な時間を彩ります。</p>
+        <p>「宝塚で女の子と楽しく飲むなら NEON」—<br>2020年のオープンから、地元の大人たちに<br>愛され続けているラウンジです。</p>
+        <div class="stat-row">
+          <div class="stat-item">
+            <span class="stat-num">2020</span>
+            <span class="stat-label">OPEN YEAR</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">¥4,000</span>
+            <span class="stat-label">FREE TIME</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num">5min</span>
+            <span class="stat-label">FROM STATION</span>
+          </div>
+        </div>
+      </div>
+      <div class="about-img-wrap fade-up" style="transition-delay:0.2s;">
+        <img src="assets/atmosphere.jpg" alt="ネオン店内の雰囲気">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SYSTEM -->
+<section id="system">
+  <div class="container">
+    <div class="fade-up">
+      <span class="section-label">SYSTEM</span>
+      <h2 class="section-title">料金・<em>システム</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="system-grid">
+      <div class="system-card fade-up" style="transition-delay:0.1s;">
+        <span class="system-card-icon">🥂</span>
+        <span class="system-card-title">FREE TIME</span>
+        <span class="system-card-price">¥4,000</span>
+        <p class="system-card-desc">ドリンク飲み放題のフリータイムプラン。入店から閉店まで、心ゆくまでお楽しみいただけます。</p>
+      </div>
+      <div class="system-card fade-up" style="transition-delay:0.2s;">
+        <span class="system-card-icon">🎶</span>
+        <span class="system-card-title">OPEN HOURS</span>
+        <span class="system-card-price">20:00〜</span>
+        <p class="system-card-desc">毎夜20:00よりオープン。日曜日は定休日です。詳細はInstagramまたはお電話でご確認ください。</p>
+      </div>
+      <div class="system-card fade-up" style="transition-delay:0.3s;">
+        <span class="system-card-icon">💌</span>
+        <span class="system-card-title">RESERVATION</span>
+        <span class="system-card-price" style="font-size:clamp(20px,2.2vw,30px);">Instagram DM</span>
+        <p class="system-card-desc">ご予約・お問い合わせはInstagramのDM（@neon_lounge3）またはお電話にて承っております。</p>
+      </div>
+    </div>
+    <p class="system-note">※ 料金は変更になる場合があります。詳細はお問い合わせください。</p>
+  </div>
+</section>
+
+<!-- ATMOSPHERE -->
+<section id="atmosphere">
+  <div class="container">
+    <div class="fade-up">
+      <span class="section-label">ATMOSPHERE</span>
+      <h2 class="section-title">ネオンが彩る、<em>夜の空間。</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="atm-grid">
+      <div class="atm-main fade-up" style="transition-delay:0.1s;">
+        <div class="atm-img-wrap">
+          <img src="assets/hero.jpg" alt="ラウンジ内装" class="atm-img">
+        </div>
+      </div>
+      <div class="atm-sub fade-up" style="transition-delay:0.2s;">
+        <div class="atm-img-wrap">
+          <img src="assets/drinks.jpg" alt="ドリンク" class="atm-img">
+        </div>
+      </div>
+      <div class="atm-sub fade-up" style="transition-delay:0.3s; margin-top:16px;">
+        <div class="atm-img-wrap">
+          <img src="assets/atmosphere.jpg" alt="雰囲気" class="atm-img">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESS -->
+<section id="access">
+  <div class="container">
+    <div class="fade-up">
+      <span class="section-label">ACCESS</span>
+      <h2 class="section-title">アクセス・<em>店舗情報</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="access-inner fade-up" style="transition-delay:0.1s;">
+      <div class="access-info">
+        <div class="access-item">
+          <span class="access-icon">📍</span>
+          <div>
+            <span class="access-label">ADDRESS</span>
+            <span class="access-val">兵庫県宝塚市湯本町5-21<br>宝塚銀馬車ビル 3F</span>
+          </div>
+        </div>
+        <div class="access-item">
+          <span class="access-icon">🚃</span>
+          <div>
+            <span class="access-label">STATION</span>
+            <span class="access-val">阪急今津線 宝塚南口駅 徒歩5分<br>各線 宝塚駅 徒歩5分</span>
+          </div>
+        </div>
+        <div class="access-item">
+          <span class="access-icon">🕗</span>
+          <div>
+            <span class="access-label">HOURS</span>
+            <span class="access-val">20:00 〜 LAST<br>定休日：日曜日</span>
+          </div>
+        </div>
+        <div class="access-item">
+          <span class="access-icon">📞</span>
+          <div>
+            <span class="access-label">PHONE</span>
+            <span class="access-val">0797-62-6522</span>
+          </div>
+        </div>
+      </div>
+      <div class="map-wrap">
+        <iframe
+          src="https://maps.google.com/maps?q=兵庫県宝塚市湯本町5-21+宝塚銀馬車ビル&output=embed&z=16"
+          title="Lounge NEON 地図" allowfullscreen loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="container">
+    <div class="cta-inner fade-up">
+      <span class="section-label" style="display:block;text-align:center;">CONTACT</span>
+      <h2 class="section-title" style="text-align:center;">まずは<em>お気軽に</em>。</h2>
+      <div class="divider" style="margin:28px auto;"></div>
+      <p>ご予約・初めてのご来店のご相談など、<br>InstagramのDMまたはお電話でいつでもお気軽にどうぞ。</p>
+      <div class="cta-btns">
+        <a href="https://www.instagram.com/neon_lounge3/" target="_blank" class="btn-primary" style="animation: pulseGlow 2.5s infinite;">
+          Instagram で相談する
+        </a>
+        <a href="tel:0797626522" class="btn-secondary">📞 電話で問い合わせ</a>
+      </div>
+      <a href="tel:0797626522" class="cta-tel">0797-62-6522</a>
+      <span class="cta-tel-label">受付時間 20:00〜24:00 / 日曜定休</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">Lounge NEON</span>
+  <div class="footer-info">
+    〒665-0003 兵庫県宝塚市湯本町5-21 宝塚銀馬車ビル 3F<br>
+    Tel: 0797-62-6522 ／ Instagram: @neon_lounge3<br>
+    営業時間 20:00〜LAST ／ 定休日：日曜日
+  </div>
+  <p class="footer-copy">© 2026 Lounge NEON. All rights reserved.</p>
+</footer>
+
+<script>
+/* ── PARTICLES ── */
+(function() {
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const COLORS = ['rgba(232,86,138,', 'rgba(201,164,76,', 'rgba(155,89,182,', 'rgba(244,144,184,'];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function createParticle() {
+    return {
+      x: Math.random() * W,
+      y: H + 10,
+      size: Math.random() * 2 + 0.5,
+      speed: Math.random() * 0.6 + 0.2,
+      drift: (Math.random() - 0.5) * 0.5,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      alpha: 0,
+      alphaSpeed: Math.random() * 0.008 + 0.004,
+      life: 0,
+      maxLife: Math.random() * 400 + 200,
+    };
+  }
+
+  function init() {
+    for (let i = 0; i < 60; i++) {
+      const p = createParticle();
+      p.y = Math.random() * H;
+      p.life = Math.random() * p.maxLife;
+      p.alpha = Math.random() * 0.6;
+      particles.push(p);
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach((p, i) => {
+      p.life++;
+      p.y -= p.speed;
+      p.x += p.drift;
+      if (p.life < 30) p.alpha = Math.min(0.7, p.alpha + p.alphaSpeed);
+      if (p.life > p.maxLife - 60) p.alpha = Math.max(0, p.alpha - p.alphaSpeed * 1.5);
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + p.alpha + ')';
+      ctx.fill();
+
+      if (p.life >= p.maxLife || p.y < -10) {
+        particles[i] = createParticle();
+      }
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  init();
+  draw();
+})();
+
+/* ── SCROLL FADE ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+/* ── NAV SCROLL STYLE ── */
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  nav.style.background = window.scrollY > 60
+    ? 'rgba(6,4,8,0.95)'
+    : 'rgba(6,4,8,0.75)';
+});
+</script>
+</body>
+</html>
